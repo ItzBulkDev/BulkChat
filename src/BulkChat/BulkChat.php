@@ -32,6 +32,7 @@ class BulkChat extends PluginBase implements Listener{
   $this->warns = [];
   $this->words = $this->getConfig()->get("Words");
   $this->maxWarns = $this->getConfig()->get("Max-Warns");
+  $this->saveDefaultConfig();
   }
 /*
 
