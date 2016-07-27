@@ -1,0 +1,19 @@
+name: BulkChat
+author: Bulk
+version: 1.0
+main: BulkChat\BulkChat
+api: [2.0.0]
+commands:
+ mute:
+  permission: bulkchat.mute
+  description: Ability to mute a player
+ unmute:
+  permission: bulkchat.unmute
+  description: Ability to unmute a player
+permissions:
+    bulkchat.mute:
+      default: false
+      description: Ability to mute a player
+    bulkchat.uhmute:
+      default: false
+      description: Ability to unmute a player
