@@ -49,7 +49,7 @@ class BulkChat extends PluginBase implements Listener{
 $p = $event->getName();
 $msg = $event->getMessage();
   if($this->isChatFilterOn() == true){
-  if(strpos($msg, $this->words)){
+  if(strpos($this->words, strtolower($msg))){
   	$p->sendMessage(C::RED."You cannot say that!");
   	$event->setCancelled();
   }
