@@ -175,7 +175,7 @@ $msg = $event->getMessage();
  }
  
  public function addWarn(Player $p){
- 	if(isset($this->warns[$p->getName()]){
+ 	if(isset($this->warns[$p->getName()])){
  	$count = $this->warns[$p->getName()];
  	unset($this->warns[$p->getName()]);
  	$this->warns[$p->getName()] = $count + 1;
