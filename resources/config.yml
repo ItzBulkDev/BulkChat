@@ -1,5 +1,6 @@
 ---
 Enable-ChatFilter: true
+Max-Warns: 5
 
 Words:
   - anus
