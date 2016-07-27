@@ -26,6 +26,7 @@ class BulkChat extends PluginBase implements Listener{
   public function onEnable(){
   $this->getServer()->getPluginManager()->registerEvents($this, $this);
   $this->muted = [];
+  $this->words = $this->getConfig()->get("Words");
   }
 /*
 
@@ -45,7 +46,16 @@ class BulkChat extends PluginBase implements Listener{
 */
 
   public function onChat(PlayerChatEvent $event){
-  $p = $event->getName()
+$p = $event->getName();
+$msg = $event->getMessage();
+  if($this->isChatFilterOn() == true){
+  if(strpos($msg, $this->words)){
+  	$p->sendMessage(C::RED."You cannot say that!");
+  	$event->setCancelled();
+  }
+  }
+  
+  
   if($this->isMuted($p) == true){
   $mutedBy = $this->getMutedBy($p);
   $event->setCancelled(true);
@@ -137,4 +147,11 @@ class BulkChat extends PluginBase implements Listener{
   $mutedBy = $this->muted[$p->getName()];
   return $mutedBy;
   }
-  
+ 
+ public function isChatFilterOn(){
+ if($this->getConfig()->get("Enable-ChatFilter") == true){
+ 	return true;
+ }else{
+ 	return false;
+ }
+ }
