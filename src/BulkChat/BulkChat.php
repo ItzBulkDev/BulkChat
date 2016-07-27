@@ -22,11 +22,16 @@ use pocketmine\Player;
 class BulkChat extends PluginBase implements Listener{
 
   public $muted;
+  public $words;
+  public $warns;
+  public $maxWarns
 
   public function onEnable(){
   $this->getServer()->getPluginManager()->registerEvents($this, $this);
   $this->muted = [];
+  $this->warns = [];
   $this->words = $this->getConfig()->get("Words");
+  $this->maxWarns = $this->getConfig()->get("Max-Warns");
   }
 /*
 
@@ -52,6 +57,14 @@ $msg = $event->getMessage();
   if(strpos($this->words, strtolower($msg))){
   	$p->sendMessage(C::RED."You cannot say that!");
   	$event->setCancelled();
+  	if($this->warnsOn == true){
+  	$this->addWarn($p);
+  	if($this->getWarns($p) >= $this->maxWarns){
+  		$p->sendMessage(C::RED."You have been automatically muted due to you reaching max warns!");
+  		
+  	}
+  	}
+  }
   }
   }
   
@@ -154,4 +167,21 @@ $msg = $event->getMessage();
  }else{
  	return false;
  }
+ }
+ 
+ public function getWarns(Player $p){
+ 	return $this->warns[$p->getName()];
+ }
+ 
+ public function addWarn(Player $p){
+ 	if(isset($this->warns[$p->getName()]){
+ 	$count = $this->warns[$p->getName()];
+ 	unset($this->warns[$p->getName()]);
+ 	$this->warns[$p->getName()] = $count + 1;
+ 	}else{
+ 	$this->warns[$p->getName()] = 1;	
+ 	}
+ 	
+ }
+
  }
