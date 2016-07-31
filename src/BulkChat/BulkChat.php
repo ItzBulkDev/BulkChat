@@ -27,12 +27,12 @@ class BulkChat extends PluginBase implements Listener{
   public $maxWarns
 
   public function onEnable(){
-  $this->getServer()->getPluginManager()->registerEvents($this, $this);
-  $this->muted = [];
-  $this->warns = [];
-  $this->words = $this->getConfig()->get("Words");
-  $this->maxWarns = $this->getConfig()->get("Max-Warns");
-  $this->saveDefaultConfig();
+    $this->getServer()->getPluginManager()->registerEvents($this, $this);
+    $this->muted = [];
+    $this->warns = [];
+    $this->words = $this->getConfig()->get("Words");
+    $this->maxWarns = $this->getConfig()->get("Max-Warns");
+    $this->saveDefaultConfig();
   }
 /*
 
@@ -52,29 +52,26 @@ class BulkChat extends PluginBase implements Listener{
 */
 
   public function onChat(PlayerChatEvent $event){
-$p = $event->getName();
-$msg = $event->getMessage();
-  if($this->isChatFilterOn() == true){
-  if(strpos($this->words, strtolower($msg))){
+    $p = $event->getName();
+    $msg = $event->getMessage();
+    if($this->isChatFilterOn() == true){
+      if(strpos($this->words, strtolower($msg))){
   	$p->sendMessage(C::RED."You cannot say that!");
   	$event->setCancelled();
-  	if($this->warnsOn == true){
-  	$this->addWarn($p);
-  	if($this->getWarns($p) >= $this->maxWarns){
-  		$p->sendMessage(C::RED."You have been automatically muted due to you reaching max warns!");
-  		
-  	}
-  	}
-  }
-  }
-  }
+        if($this->warnsOn == true){
+  	  $this->addWarn($p);
+  	  if($this->getWarns($p) >= $this->maxWarns){
+            $p->sendMessage(C::RED."You have been automatically muted due to you reaching max warns!");
+  	    }
+  	  }
+        }
+      }
   
-  
-  if($this->isMuted($p) == true){
-  $mutedBy = $this->getMutedBy($p);
-  $event->setCancelled(true);
-  $p->sendMessage(C::RED."You cannot chat, you were muted by " . C::AQUA . $mutedBy);
-  }
+     if($this->isMuted($p) == true){
+       $mutedBy = $this->getMutedBy($p);
+       $event->setCancelled(true);
+       $p->sendMessage(C::RED."You cannot chat, you were muted by " . C::AQUA . $mutedBy);
+     }
   }
   
   	public function onCommand(CommandSender $sender, Command $command, $label, array $args){
@@ -83,44 +80,44 @@ $msg = $event->getMessage();
 				if($sender->hasPermission("bulkchat.mute"){
 					if(isset($args[0])){
 						$p = $this->getServer()->getPlayer($args[0]);
-						if($p instanceof Player){
-						if($this->isMuted($p) == false{
-						$sender->sendMessage(C::AQUA."Muted " . C::RED . $p->getName());
-						$this->muted[$p->getName()] = $sender->getName();
-						$p->sendMessage(C::RED."You have been muted by " . C::AQUA . $sender->getName() . C::RED . ", You cannot chat until you're unmuted!");
+							if($p instanceof Player){
+								if($this->isMuted($p) == false{
+									$sender->sendMessage(C::AQUA."Muted " . C::RED . $p->getName());
+									$this->muted[$p->getName()] = $sender->getName();
+									$p->sendMessage(C::RED."You have been muted by " . C::AQUA . $sender->getName() . C::RED . ", You cannot chat until you're unmuted!");
+								}else{
+									$sender->sendMessage(C::RED . $args[0] . " is already muted!");
+								}
+							}else{
+								$sender->sendMessage(C::RED . $args[0] . " is not online!");
+							}
 						}else{
-						$sender->sendMessage(C::RED . $args[0] . " is already muted!");
-						}
-						}else{
-						$sender->sendMessage(C::RED . $args[0] . " is not online!");
+							$sender->sendMessage(C::RED."Use /mute [player]");
 						}
 					}else{
-					$sender->sendMessage(C::RED."Use /mute [player]");
+						$sender->sendMessage(C::RED."No permission to use this!");
 					}
-				}else{
-				$sender->sendMessage(C::RED."No permission to use this!");
-				}
-				break;
+					break;
 				case "unmute":
 				if($sender->hasPermission("bulkchat.unmute"){
 					if(isset($args[0])){
 						$p = $this->getServer()->getPlayer($args[0]);
 						if($p instanceof Player){
-						if($this->isMuted($p) == true){
-						$sender->sendMessage(C::AQUA."Unuted " . C::RED . $p->getName());
-						$p->sendMessage(C::AQUA."You have been unmuted by " . C::GREEN . $sender->getName());
-						unset($this->muted[$p->getName()]);
+							if($this->isMuted($p) == true){
+								$sender->sendMessage(C::AQUA."Unuted " . C::RED . $p->getName());
+								$p->sendMessage(C::AQUA."You have been unmuted by " . C::GREEN . $sender->getName());
+								unset($this->muted[$p->getName()]);
+							}else{
+								$sender->sendMessage(C::RED . $args[0] . " is not muted!");
+							}
 						}else{
-						$sender->sendMessage(C::RED . $args[0] . " is not muted!");
-						}
-						}else{
-						$sender->sendMessage(C::RED . $args[0] . " is not online!");
+							$sender->sendMessage(C::RED . $args[0] . " is not online!");
 						}
 					}else{
-					$sender->sendMessage(C::RED."Use /mute [player]");
+						$sender->sendMessage(C::RED."Use /mute [player]");
 					}
 				}else{
-				$sender->sendMessage(C::RED."No permission to use this!");
+					$sender->sendMessage(C::RED."No permission to use this!");
 				}
 				break;
 			}
@@ -149,40 +146,31 @@ $msg = $event->getMessage();
 
 
 */
-  public function isMuted(Player $p){
-  if(isset($this->muted[$p->getName()])){
-  return true;
-  }else{
-  return false;
-  }
-  }
+  	public function isMuted(Player $p) : bool {
+		 $this->muted[$p->getName()] ?? true ?? false;
+	 }
   
-  public function getMutedBy(Player $p){
-  $mutedBy = $this->muted[$p->getName()];
-  return $mutedBy;
-  }
+  	public function getMutedBy(Player $p) : string {
+  		$mutedBy = $this->muted[$p->getName()];
+  		return $mutedBy;
+  	}
  
- public function isChatFilterOn(){
- if($this->getConfig()->get("Enable-ChatFilter") == true){
- 	return true;
- }else{
- 	return false;
- }
- }
- 
- public function getWarns(Player $p){
- 	return $this->warns[$p->getName()];
- }
- 
- public function addWarn(Player $p){
- 	if(isset($this->warns[$p->getName()])){
- 	$count = $this->warns[$p->getName()];
- 	unset($this->warns[$p->getName()]);
- 	$this->warns[$p->getName()] = $count + 1;
- 	}else{
- 	$this->warns[$p->getName()] = 1;	
+ 	public function isChatFilterOn() : bool {
+		return $this->getConfig()->get("Enable-ChatFilter") == true ? true : false;
  	}
+ 
+	 public function getWarns(Player $p) : integer {
+ 		return $this->warns[$p->getName()];
+	 }
+ 
+	 public function addWarn(Player $p){
+ 		if(isset($this->warns[$p->getName()])){
+ 			$count = $this->warns[$p->getName()]; //Why use unset ???????
+ 			$this->warns[$p->getName()] = $count + 1;
+ 		}else{
+ 			$this->warns[$p->getName()] = 1;	
+ 		}
  	
- }
+	 }
 
  }
